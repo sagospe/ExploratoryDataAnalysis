@@ -7,7 +7,7 @@ NEI <- readRDS("./FNEI_data/summarySCC_PM25.rds")
 SCC <- readRDS("./FNEI_data/Source_Classification_Code.rds")
 
 
-## Drawing Plot 1
+## Drawing Plot
 
 ## Have total emissions from PM2.5 decreased in the United States from 
 ## 1999 to 2008? Using the base plotting system, make a plot showing the total 
@@ -31,7 +31,8 @@ barplot(NEI_total$total.Emissions.million.tons,
         main=expression("Total emissions from PM"[2.5]*" in the United States"),
         xlab="Years",
         ylab=expression("Amount of PM"[2.5]*" emitted, in million tons"),
-        names.arg=NEI_total$year)
+        names.arg=NEI_total$year,
+        col = "red")
 
 
 # Making png file
