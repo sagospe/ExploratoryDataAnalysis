@@ -19,25 +19,25 @@ library(ggplot2)
 ## Transforming column Year in a factor
 NEI$year = factor(NEI$year)
 
-## Getting the data
-NEI_total <-  group_by(data = NEI, year, type) %>% 
-        summarise(total.Emissions.tons = sum(Emissions))
+## Getting the data for emissions from coal combusion-related
+SCC.coal <- SCC[grepl("coal", SCC$Short.Name, ignore.case = TRUE) &
+        grepl("comb", SCC$Short.Name, ignore.case = TRUE), ]
+
+NEI.merged <- merge(NEI, SCC.coal, by.x = "SCC", by.y = "SCC")
+
+NEI.coal <- group_by(NEI.merged, year) %>% 
+        summarise(total.Emissions.tons = sum(Emissions)/1000)
 
 ## Drawing the plot
 png(filename = "plot4.png")
 
 qplot(year, 
-      data = NEI_total_coal, 
-      facets = . ~ type, 
-      geom="bar", 
-      weight=total.Emissions.tons, 
-      main=expression("Total emissions from PM"[2.5]*
-                              " in the Baltimore City, Maryland"),
-      xlab="Years",
-      ylab = expression("Amount of PM"[2.5]*" emitted, in tons"),
-      fill = type)
-
-
+      data = NEI.coal, 
+      geom = "bar", 
+      weight = total.Emissions.tons, 
+      main = expression("Total emissions from PM"[2.5]*" for coal combustion-related in USA"),
+      xlab = "Years",
+      ylab = expression("Amount of PM"[2.5]*" emitted, in thousands tons"))
 
 # king png file
 dev.off()
